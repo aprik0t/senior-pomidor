@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeniorPomidor.Web", "SeniorPomidor.Web\SeniorPomidor.Web.csproj", "{A2FBA665-B461-4B1E-BEA6-BC36811C8663}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeniorPomodor.Web", "SeniorPomodor.Web\SeniorPomodor.Web.csproj", "{A2FBA665-B461-4B1E-BEA6-BC36811C8663}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeniorPomidor.Core", "SeniorPomidor.Core\SeniorPomidor.Core.csproj", "{8042515E-B83F-4855-BBE4-96635D86751F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeniorPomodor.Core", "SeniorPomodor.Core\SeniorPomodor.Core.csproj", "{8042515E-B83F-4855-BBE4-96635D86751F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

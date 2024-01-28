@@ -5,7 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
-        <RootNamespace>SeniorPomidor</RootNamespace>
+        <RootNamespace>SeniorPomodor</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,7 +17,7 @@
 
 
     <ItemGroup>
-      <ProjectReference Include="..\SeniorPomidor.Core\SeniorPomidor.Core.csproj" />
+      <ProjectReference Include="..\SeniorPomodor.Core\SeniorPomodor.Core.csproj" />
     </ItemGroup>
 
 

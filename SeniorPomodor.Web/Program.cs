@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using SeniorPomidor.Core;
+using SeniorPomodor.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 

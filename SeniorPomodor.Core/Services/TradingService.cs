@@ -1,7 +1,7 @@
 using Tinkoff.InvestApi;
 using Tinkoff.InvestApi.V1;
 
-namespace SeniorPomidor.Core.Services;
+namespace SeniorPomodor.Core.Services;
 
 public sealed class TradingService(InvestApiClient investApiClient) : ITradingService
 {

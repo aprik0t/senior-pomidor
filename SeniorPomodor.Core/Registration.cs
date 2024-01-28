@@ -1,10 +1,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using SeniorPomidor.Core.Services;
+using SeniorPomodor.Core.Services;
 using Tinkoff.InvestApi;
 
-namespace SeniorPomidor.Core;
+namespace SeniorPomodor.Core;
 
 public static class Registration
 {
