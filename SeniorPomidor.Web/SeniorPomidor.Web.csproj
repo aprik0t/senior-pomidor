@@ -5,7 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
-        <RootNamespace>SeniorPomodor</RootNamespace>
+        <RootNamespace>SeniorPomidor</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -14,13 +14,7 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
     </ItemGroup>
 
-
-
     <ItemGroup>
-      <ProjectReference Include="..\SeniorPomodor.Core\SeniorPomodor.Core.csproj" />
+      <ProjectReference Include="..\SeniorPomidor.Core\SeniorPomidor.Core.csproj" />
     </ItemGroup>
-
-
-
-
 </Project>

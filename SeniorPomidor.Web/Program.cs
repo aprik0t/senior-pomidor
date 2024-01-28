@@ -1,18 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
-using SeniorPomodor.Core;
+using SeniorPomidor;
+using SeniorPomidor.Core;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddHttpContextAccessor();
-builder.Configuration
-    .AddJsonFile("appsettings.json")
-    .AddJsonFile("appsettings.Development.json")
-    .AddJsonFile("appsettings.Local.json");
-builder.Services.AddTradingStuff(builder.Configuration);
+builder.Services.ConfigureServices(builder.Configuration);
 
 var app = builder.Build();
 

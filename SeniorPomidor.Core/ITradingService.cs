@@ -1,4 +1,4 @@
-namespace SeniorPomodor.Core;
+namespace SeniorPomidor.Core;
 
 public interface ITradingService
 {
