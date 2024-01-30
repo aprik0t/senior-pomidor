@@ -7,10 +7,14 @@ namespace SeniorPomidor.Core.Services;
 
 public sealed class TradingService(InvestApiClient investApiClient) : ITradingService
 {
+    private readonly Random _random = new(DateTime.UtcNow.Millisecond);
+    private void SleepRandom() => Thread.Sleep(_random.Next(1000, 3000));
+
     public async Task<object> GetUserAccountsAsync(CancellationToken cancellationToken)
     {
         var accountsInfo = await investApiClient.Users.GetAccountsAsync(new GetAccountsRequest()
             , cancellationToken: cancellationToken);
+        SleepRandom();
         
         return accountsInfo.Accounts.Where(a => a.Status is AccountStatus.Open).ToArray();
     }
@@ -18,6 +22,7 @@ public sealed class TradingService(InvestApiClient investApiClient) : ITradingSe
     {
         var userTariffInfo = await investApiClient.Users.GetUserTariffAsync(new GetUserTariffRequest()
             , cancellationToken: cancellationToken);
+        SleepRandom();
 
         return userTariffInfo;
     }
@@ -26,6 +31,7 @@ public sealed class TradingService(InvestApiClient investApiClient) : ITradingSe
     {
         var userInfo = await investApiClient.Users.GetInfoAsync(new GetInfoRequest()
             , cancellationToken: cancellationToken);
+        SleepRandom();
 
         return userInfo;
     }
@@ -34,6 +40,7 @@ public sealed class TradingService(InvestApiClient investApiClient) : ITradingSe
     {
         var accountsInfo = await investApiClient.Users.GetAccountsAsync(new GetAccountsRequest(), 
             cancellationToken: cancellationToken);
+        SleepRandom();
 
         var result = new List<object>();
         foreach (var account in accountsInfo.Accounts)
@@ -47,17 +54,10 @@ public sealed class TradingService(InvestApiClient investApiClient) : ITradingSe
                     To = Timestamp.FromDateTime(now),
                 }
                 , cancellationToken: cancellationToken);
+            SleepRandom();
             result.Add(operationsInfo);
         }
 
         return result.ToArray();
-    }
-
-    public async Task<object> ReturnException(CancellationToken cancellationToken)
-    {
-        var stream = investApiClient.Instruments.Currencies(new InstrumentsRequest()
-                , cancellationToken: cancellationToken);
-
-        return Task.FromException(new InvalidOperationException("Let's assume that this exception was thrown by gRPC"));
     }
 }
