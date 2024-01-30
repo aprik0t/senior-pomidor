@@ -60,13 +60,4 @@ public sealed class TradingService(InvestApiClient investApiClient) : ITradingSe
 
         return Task.FromException(new InvalidOperationException("Let's assume that this exception was thrown by gRPC"));
     }
-
-
-    public async Task<object> GetCurrenciesAsync(CancellationToken cancellationToken)
-    {
-        var currenciesResponse = await investApiClient.MarketData.GetCandlesAsync(new GetCandlesRequest{  }).Instruments.CurrenciesAsync(new InstrumentsRequest());
-        var currencies = currenciesResponse.Instruments.ToArray();
-        
-    }
-    
 }
