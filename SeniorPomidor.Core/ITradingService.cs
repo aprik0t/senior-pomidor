@@ -2,6 +2,8 @@ namespace SeniorPomidor.Core;
 
 public interface ITradingService
 {
-    object GetMarginDataAsync(CancellationToken cancellationToken = default);
-    Task<object> GetTariffsDataAsync(CancellationToken cancellationToken = default);
+    Task<object> GetTariffDataAsync(CancellationToken cancellationToken = default);
+    Task<object> GetOperationsDataAsync(CancellationToken cancellationToken = default);
+    Task<object> GetUserInfoAsync(CancellationToken cancellationToken = default);
+    Task<object> GetUserAccountsAsync(CancellationToken cancellationToken = default);
 }

@@ -269,4 +269,5 @@ __pycache__/
 # VS code history files
 .history/
 /src/.history/
-SeniorPomidor/appsettings.Local.json
+
+./*/appsettings.Local.json
