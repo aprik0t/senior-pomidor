@@ -272,4 +272,3 @@ __pycache__/
 
 # local settings file
 **/*/appsettings.Local.json
-SeniorPomidor.Web/appsettings.Local.json
