@@ -270,4 +270,5 @@ __pycache__/
 .history/
 /src/.history/
 
-./*/appsettings.Local.json
+# local settings file
+**/*/appsettings.Local.json
