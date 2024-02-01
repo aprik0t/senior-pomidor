@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using SeniorPomidor;
 using SeniorPomidor.Core;
@@ -19,7 +20,7 @@ app.MapGet("/async-when-all", async (HttpContext httpContext, [FromServices] ITr
         var timer = new Timer();
         timer.Start();
         var requestAborted = httpContext.RequestAborted;
-        var tasks = new List<Task<dynamic>>
+        var tasks = new List<Task<object>>
         {
             Task.Run(() => tradingService.GetUserAccountsAsync(requestAborted)),
             Task.Run(() => tradingService.GetTariffDataAsync(requestAborted)),
@@ -35,7 +36,32 @@ app.MapGet("/async-when-all", async (HttpContext httpContext, [FromServices] ITr
             Console.WriteLine($"---- Result: {result}");
         }
     })
-    .WithName("GetInvestData")
+    .WithName("GetInvestDataWhenAll")
     .WithOpenApi();
+app.MapGet("/async-when-any", async (HttpContext httpContext, [FromServices] ITradingService tradingService) =>
+    {
+        var timer = new Timer();
+        timer.Start();
+        var requestAborted = httpContext.RequestAborted;
+        var tasks = new List<Task<object>>
+        {
+            Task.Run(() => tradingService.GetUserAccountsAsync(requestAborted)),
+            Task.Run(() => tradingService.GetTariffDataAsync(requestAborted)),
+            Task.Run(() => tradingService.GetOperationsDataAsync(requestAborted)),
+            Task.Run(() => tradingService.GetUserInfoAsync(requestAborted))
+        };
+
+        var result = await Task.WhenAny(tasks);
+        timer.Stop();
+        var allStatuses = tasks.Select(t => t.Status)
+            .Except(new [] { result.Status })
+            .Select(s => s.ToString("G"))
+            .ToArray();
+        
+        Console.WriteLine($"----- Milliseconds elapsed: {timer.Interval}");
+        Console.WriteLine($"---- Other statuses: {string.Join(", ", allStatuses)}");
+        Console.WriteLine($"---- Result: {result}");
+    })
+    .WithName("GetInvestDataWhenAny");
 
 app.Run();
