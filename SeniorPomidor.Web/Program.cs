@@ -1,11 +1,11 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using SeniorPomidor;
-using SeniorPomidor.Core;
+using SeniorPomidor.Core.Services.TradingService;
 using Timer = System.Timers.Timer;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.ConfigureServices(builder.Configuration);
+const string asyncTag = "async";
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
@@ -15,7 +15,7 @@ if (app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 
-app.MapGet("/async-when-all", async (HttpContext httpContext, [FromServices] ITradingService tradingService) =>
+app.MapGet("/async/when-all", async (HttpContext httpContext, [FromServices] ITradingService tradingService) =>
     {
         var timer = new Timer();
         timer.Start();
@@ -37,8 +37,10 @@ app.MapGet("/async-when-all", async (HttpContext httpContext, [FromServices] ITr
         }
     })
     .WithName("GetInvestDataWhenAll")
-    .WithOpenApi();
-app.MapGet("/async-when-any", async (HttpContext httpContext, [FromServices] ITradingService tradingService) =>
+    .WithOpenApi()
+    .WithTags(asyncTag);
+
+app.MapGet("/async/when-any", async (HttpContext httpContext, [FromServices] ITradingService tradingService) =>
     {
         var timer = new Timer();
         timer.Start();
@@ -51,17 +53,51 @@ app.MapGet("/async-when-any", async (HttpContext httpContext, [FromServices] ITr
             Task.Run(() => tradingService.GetUserInfoAsync(requestAborted))
         };
 
-        var result = await Task.WhenAny(tasks);
+        while (tasks.Any(t => t.Status < TaskStatus.RanToCompletion))
+        {
+            var completedTask = await Task.WhenAny(tasks);
+            Console.WriteLine($"----- Milliseconds elapsed: {timer.Interval}");
+            Console.WriteLine($"----- Result: {completedTask.Result}");
+            tasks.Remove(completedTask);
+        }
         timer.Stop();
-        var allStatuses = tasks.Select(t => t.Status)
-            .Except(new [] { result.Status })
-            .Select(s => s.ToString("G"))
-            .ToArray();
-        
-        Console.WriteLine($"----- Milliseconds elapsed: {timer.Interval}");
-        Console.WriteLine($"---- Other statuses: {string.Join(", ", allStatuses)}");
-        Console.WriteLine($"---- Result: {result}");
+        Console.WriteLine("----- All tasks are completed");
     })
-    .WithName("GetInvestDataWhenAny");
+    .WithName("GetInvestDataWhenAny")
+    .WithOpenApi()
+    .WithTags(asyncTag);
+
+app.MapGet("/async/task-completion-source", async (HttpContext httpContext,
+        [FromServices] ITradingService tradingService) =>
+    {
+        var completionSource = new TaskCompletionSource<object>();
+
+    })
+    .WithName("GetInvestDataWithCompletionSource")
+    .WithOpenApi()
+    .WithTags(asyncTag);
+
+app.MapGet("/async/semaphore-slim", async (HttpContext httpContext,
+        [FromKeyedServices("SemaphoredTradingService")] ITradingService tradingService) =>
+    {
+        var timer = new Timer();
+        timer.Start();
+        var requestAborted = httpContext.RequestAborted;
+        var tasks = new List<Task<object>>
+        {
+            Task.Run(() => tradingService.GetUserAccountsAsync(requestAborted)),
+            Task.Run(() => tradingService.GetTariffDataAsync(requestAborted)),
+            Task.Run(() => tradingService.GetOperationsDataAsync(requestAborted)),
+            Task.Run(() => tradingService.GetOperationsDataAsync(requestAborted)),
+            Task.Run(() => tradingService.GetOperationsDataAsync(requestAborted)),
+            Task.Run(() => tradingService.GetOperationsDataAsync(requestAborted)),
+            Task.Run(() => tradingService.GetUserInfoAsync(requestAborted))
+        };
+
+        var allData = Task.WhenAll(tasks);
+    })
+    .WithName("GetInvestDataWithSemaphoreSlim")
+    .WithOpenApi()
+    .WithTags(asyncTag);
 
 app.Run();

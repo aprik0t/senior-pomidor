@@ -14,6 +14,6 @@ public static class Registration
         
         configuration.AddJsonFile("appsettings.json")
             .AddJsonFile("appsettings.Development.json")
-            .AddJsonFile("appsettings.Local.json");
+            .AddJsonFile("appsettings.Local.json", true);
     }
 }
